@@ -26,7 +26,7 @@ def process_dir(dirname: str) -> list[str]:
             if entry.is_file():
                 m = regex_prog.match(entry.name)
                 if m:
-                    base_name = f'{m.group('name')}.{m.group('ext')}'
+                    base_name = f"{m.group('name')}.{m.group('ext')}"
                     full_name = os.path.join(dirname, base_name)
                     cached = cached_basefiles.get(full_name)
                     if cached:
