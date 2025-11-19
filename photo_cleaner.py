@@ -7,6 +7,11 @@ regex_pattern = r'(?P<name>\S+)\s*\(\d+\)\.(?P<ext>.+)'
 regex_prog = re.compile(regex_pattern)
 
 
+def log(msg: str):
+    if options.verbose:
+        print(msg)
+
+
 class CachedInfo:
     def __init__(self, isfile: bool, size: int):
         self.isfile = isfile
@@ -40,7 +45,14 @@ def process_dir(dirname: str) -> list[str]:
     return to_remove
 
 
+def remove_files(names: list[str]):
+    for fname in names:
+        log(f"Removing file '{fname}'")
+        os.remove(fname)
+
+
 def main():
+    global options
     parser = argparse.ArgumentParser()
     parser.add_argument('-r', '--recursive', action='store_true', help='Process subdirectories recursively')
     parser.add_argument(
@@ -48,11 +60,16 @@ def main():
         '--execute',
         action='store_true',
         help='Perform file removal, otherwise just prints duplicate filenames')
-    parser.add_argument('dirs', nargs='+', help='Directories to process')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Verbose mode')
+    parser.add_argument('dirs', metavar='dir-path', nargs='+', help='Directory to process')
     options = parser.parse_args()
     for dir in options.dirs:
+        log(f"Processing '{dir}'...")
         output = process_dir(dir)
-        print(f'output: {output}')
+        if options.execute:
+            remove_files(output)
+        else:
+            print(f'duplicate files: {output}')
 
 
 if __name__ == "__main__":
