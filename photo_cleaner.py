@@ -42,6 +42,10 @@ def process_dir(dirname: str) -> list[str]:
                             if info.isfile and info.size == entry.stat().st_size:
                                 to_remove.append(entry.path)
                         cached_basefiles[full_name] = info
+            elif entry.is_dir() and options.recursive:
+                log(f"Processing subdirectory {entry.path}")
+                to_remove += process_dir(entry.path)
+
     return to_remove
 
 
