@@ -3,7 +3,7 @@ import os
 import re
 import stat
 
-regex_pattern = r'(?P<name>\S+)\s*\(\d+\)\.(?P<ext>.+)'
+regex_pattern = r'(?P<name>\S+)\s*\(\d+\)\.(?P<ext>.+)$'
 regex_prog = re.compile(regex_pattern)
 
 
